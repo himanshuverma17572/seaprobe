@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,7 +18,7 @@ public class Probe {
     private Coordinates currentCoordinates;
     private CurrentAxis currectAxis;
     @OneToMany
-    private List<Coordinates> coordinatesVisited;
+    private List<Coordinates> coordinatesVisited = new ArrayList<>();
 
     public Integer getId() {
         return id;

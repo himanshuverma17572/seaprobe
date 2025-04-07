@@ -6,14 +6,17 @@ import com.example.seaprobe.model.CurrentAxis;
 import com.example.seaprobe.model.Probe;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(MockitoExtension.class)
 class ProbeServiceTest {
 
     @Mock
@@ -26,6 +29,7 @@ class ProbeServiceTest {
         Integer probeId = 1;
         Probe probe = getProbe(probeId);
         Mockito.when(probeRepository.findById(probeId)).thenReturn(Optional.of(probe));
+        Mockito.when(probeRepository.save(probe)).thenReturn(probe);
         Optional<Probe> movedForward = probeService.moveForward(probeId, 5);
         Assertions.assertEquals(10, movedForward.get().getCurrentCoordinates().getxPosition());
     }

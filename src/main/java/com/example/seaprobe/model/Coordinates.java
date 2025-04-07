@@ -14,6 +14,14 @@ public class Coordinates {
     private Integer xPosition;
     private Integer yPosition;
 
+    public Coordinates() {
+    }
+
+    public Coordinates(Integer xPosition, Integer yPosition) {
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+    }
+
     public Integer getId() {
         return id;
     }

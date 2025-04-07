@@ -24,7 +24,7 @@ public class ProbeController {
 
     @PutMapping("/move/forward/{probeId}/{steps}")
     public ResponseEntity moveForward(@PathVariable("probeId") Integer probeId, @PathVariable("steps") Integer steps) {
-        Optional<Probe> probeOptional = probeService.moveBackward(probeId, steps);
+        Optional<Probe> probeOptional = probeService.moveForward(probeId, steps);
         return ResponseEntity.of(probeOptional);
     }
 
@@ -34,14 +34,21 @@ public class ProbeController {
         return ResponseEntity.of(probeOptional);
     }
 
-    @PutMapping("/turn/left/{probeId}/")
+    @PutMapping("/turn/left/{probeId}")
     public ResponseEntity turnLeft(@PathVariable("probeId") Integer probeId) {
         boolean success = probeService.turnLeft(probeId);
-        return success ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+        return success ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
-    @PutMapping("/turn/right/{probeId}/")
+
+    @PutMapping("/turn/right/{probeId}")
     public ResponseEntity turnRight(@PathVariable("probeId") Integer probeId) {
         boolean success = probeService.turnRight(probeId);
-        return success ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+        return success ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @PostMapping("/setup")
+    public ResponseEntity setupProbe() {
+        Optional<Probe> probe = probeService.setupProbe();
+        return probe.isPresent() ? ResponseEntity.status(HttpStatus.CREATED).body(probe.get()) : ResponseEntity.internalServerError().build();
     }
 }

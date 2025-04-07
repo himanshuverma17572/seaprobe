@@ -7,6 +7,7 @@ import com.example.seaprobe.model.Probe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -21,18 +22,20 @@ public class ProbeService {
     public Optional<Probe> moveForward(Integer probeId, Integer steps) {
         return probeRepository.findById(probeId)
                 .map(probe -> {
-                    CurrentAxis currectAxis = probe.getCurrectAxis();
+                    CurrentAxis currentAxis = probe.getCurrectAxis();
                     Coordinates currentCoordinates = probe.getCurrentCoordinates();
-                    if (CurrentAxis.X_POSITIVE.equals(currectAxis)) {
-                        currentCoordinates.setxPosition(currentCoordinates.getxPosition() + steps);
-                    } else if (CurrentAxis.X_NEGATIVE.equals(currectAxis)) {
-                        currentCoordinates.setxPosition(currentCoordinates.getxPosition() - steps);
-                    } else if (CurrentAxis.Y_POSITIVE.equals(currectAxis)) {
-                        currentCoordinates.setyPosition(currentCoordinates.getyPosition() + steps);
-                    } else if (CurrentAxis.Y_NEGATIVE.equals(currectAxis)) {
-                        currentCoordinates.setxPosition(currentCoordinates.getxPosition() - steps);
+                    probe.getCoordinatesVisited().add(currentCoordinates);
+                    Coordinates nextCoordinates = new Coordinates(currentCoordinates.getxPosition(), currentCoordinates.getyPosition());
+                    if (CurrentAxis.X_POSITIVE.equals(currentAxis)) {
+                        nextCoordinates.setxPosition(nextCoordinates.getxPosition() + steps);
+                    } else if (CurrentAxis.X_NEGATIVE.equals(currentAxis)) {
+                        nextCoordinates.setxPosition(nextCoordinates.getxPosition() - steps);
+                    } else if (CurrentAxis.Y_POSITIVE.equals(currentAxis)) {
+                        nextCoordinates.setyPosition(nextCoordinates.getyPosition() + steps);
+                    } else if (CurrentAxis.Y_NEGATIVE.equals(currentAxis)) {
+                        nextCoordinates.setyPosition(nextCoordinates.getyPosition() - steps);
                     }
-                    probe.setCurrentCoordinates(currentCoordinates);
+                    probe.setCurrentCoordinates(nextCoordinates);
                     return probeRepository.save(probe);
                 });
     }
@@ -40,18 +43,20 @@ public class ProbeService {
     public Optional<Probe> moveBackward(Integer probeId, Integer steps) {
         return probeRepository.findById(probeId)
                 .map(probe -> {
-                    CurrentAxis currectAxis = probe.getCurrectAxis();
+                    CurrentAxis currentAxis = probe.getCurrectAxis();
                     Coordinates currentCoordinates = probe.getCurrentCoordinates();
-                    if (CurrentAxis.X_POSITIVE.equals(currectAxis)) {
-                        currentCoordinates.setxPosition(currentCoordinates.getxPosition() - steps);
-                    } else if (CurrentAxis.X_NEGATIVE.equals(currectAxis)) {
-                        currentCoordinates.setxPosition(currentCoordinates.getxPosition() + steps);
-                    } else if (CurrentAxis.Y_POSITIVE.equals(currectAxis)) {
-                        currentCoordinates.setyPosition(currentCoordinates.getyPosition() - steps);
-                    } else if (CurrentAxis.Y_NEGATIVE.equals(currectAxis)) {
-                        currentCoordinates.setxPosition(currentCoordinates.getxPosition() + steps);
+                    probe.getCoordinatesVisited().add(currentCoordinates);
+                    Coordinates nextCoordinates = new Coordinates(currentCoordinates.getxPosition(), currentCoordinates.getyPosition());
+                    if (CurrentAxis.X_POSITIVE.equals(currentAxis)) {
+                        nextCoordinates.setxPosition(nextCoordinates.getxPosition() - steps);
+                    } else if (CurrentAxis.X_NEGATIVE.equals(currentAxis)) {
+                        nextCoordinates.setxPosition(nextCoordinates.getxPosition() + steps);
+                    } else if (CurrentAxis.Y_POSITIVE.equals(currentAxis)) {
+                        nextCoordinates.setyPosition(nextCoordinates.getyPosition() - steps);
+                    } else if (CurrentAxis.Y_NEGATIVE.equals(currentAxis)) {
+                        nextCoordinates.setyPosition(nextCoordinates.getyPosition() + steps);
                     }
-                    probe.setCurrentCoordinates(currentCoordinates);
+                    probe.setCurrentCoordinates(nextCoordinates);
                     return probeRepository.save(probe);
                 });
     }
@@ -88,5 +93,15 @@ public class ProbeService {
                     }
                     return probeRepository.save(probe);
                 }).isPresent();
+    }
+
+    public Optional<Probe> setupProbe() {
+        Probe probe = new Probe();
+        probe.setCurrectAxis(CurrentAxis.X_POSITIVE);
+        Coordinates coordinates = new Coordinates();
+        coordinates.setxPosition(0);
+        coordinates.setyPosition(0);
+        probe.setCurrentCoordinates(coordinates);
+        return Optional.of(probeRepository.save(probe));
     }
 }
