@@ -1,6 +1,8 @@
 package com.example.seaprobe.model;
 
 public enum CurrentAxis {
-    X,
-    Y
+    X_POSITIVE,
+    X_NEGATIVE,
+    Y_POSITIVE,
+    Y_NEGATIVE
 }
