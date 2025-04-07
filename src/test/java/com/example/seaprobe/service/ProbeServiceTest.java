@@ -53,7 +53,7 @@ class ProbeServiceTest {
     private Probe getProbe(Integer probeId) {
         Probe probe = new Probe();
         probe.setId(probeId);
-        probe.setCurrectAxis(CurrentAxis.X);
+        probe.setCurrectAxis(CurrentAxis.X_POSITIVE);
         Coordinates coordinates = new Coordinates();
         coordinates.setId(1);
         coordinates.setxPosition(5);
