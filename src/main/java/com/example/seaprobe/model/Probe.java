@@ -7,6 +7,7 @@ import org.hibernate.annotations.CascadeType;
 import java.util.List;
 
 @Entity
+
 public class Probe {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,4 +19,35 @@ public class Probe {
     @OneToMany
     private List<Coordinates> coordinatesVisited;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Coordinates getCurrentCoordinates() {
+        return currentCoordinates;
+    }
+
+    public void setCurrentCoordinates(Coordinates currentCoordinates) {
+        this.currentCoordinates = currentCoordinates;
+    }
+
+    public CurrentAxis getCurrectAxis() {
+        return currectAxis;
+    }
+
+    public void setCurrectAxis(CurrentAxis currectAxis) {
+        this.currectAxis = currectAxis;
+    }
+
+    public List<Coordinates> getCoordinatesVisited() {
+        return coordinatesVisited;
+    }
+
+    public void setCoordinatesVisited(List<Coordinates> coordinatesVisited) {
+        this.coordinatesVisited = coordinatesVisited;
+    }
 }
